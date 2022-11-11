@@ -1,4 +1,5 @@
 import 'package:attendance_dbms/attendance.dart';
+import 'package:attendance_dbms/login.dart';
 import 'package:flutter/material.dart';
 import 'home.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      home: const LoginDemo(),
     );
   }
 }
