@@ -1,4 +1,5 @@
 import 'package:attendance_dbms/home.dart';
+import 'package:attendance_dbms/mongodb.dart';
 import 'package:flutter/material.dart';
 
 class LoginDemo extends StatefulWidget {
@@ -9,22 +10,43 @@ class LoginDemo extends StatefulWidget {
 }
 
 class _LoginDemoState extends State<LoginDemo> {
+
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  var log = "LOGIN";
+
+  login() async{
+    bool check = await MongoDatabase.loginpage(email.text,password.text);
+    if(check == true) {
+      log = "LOGIN";
+      Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
+    }
+    else{
+      setState(() {
+        log = "Login Again";
+      });
+    }
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.deepPurple,
-        title: Center(child: Text("Login Page",style: TextStyle(color: Colors.white),)),
+        title: const Center(child: Text("Login Page",style: TextStyle(color: Colors.white),)),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            SizedBox(height: 100,),
+            const SizedBox(height: 100,),
             Padding(
               //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
+                controller: email,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Email',
@@ -36,7 +58,7 @@ class _LoginDemoState extends State<LoginDemo> {
                   left: 15.0, right: 15.0, top: 15, bottom: 0),
               //padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
-
+                controller: password,
                 obscureText: true,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -44,7 +66,7 @@ class _LoginDemoState extends State<LoginDemo> {
                     hintText: 'Enter secure password'),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
               height: 50,
               width: 250,
@@ -52,12 +74,11 @@ class _LoginDemoState extends State<LoginDemo> {
                   color: Colors.deepPurple, borderRadius: BorderRadius.circular(20)),
               child: TextButton(
                 onPressed: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => HomePage()));
+                  login();
                 },
                 child: Text(
-                  'Login',
-                  style: TextStyle(color: Colors.white, fontSize: 25),
+                  log,
+                  style: const TextStyle(color: Colors.white, fontSize: 25),
                 ),
               ),
             ),
