@@ -1,4 +1,5 @@
 import 'package:attendance_dbms/attendance.dart';
+import 'package:attendance_dbms/grade_home.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -58,7 +59,14 @@ class _HomePageState extends State<HomePage> {
                                 AttendaceHome()));
                   },
                   child: Text("Attendance")),
-              ElevatedButton(onPressed: () {}, child: Text("Grades")),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => GradeHome()));
+                  },
+                  child: Text("Grades")),
               ElevatedButton(onPressed: () {}, child: Text("Students"))
             ],
           ),
