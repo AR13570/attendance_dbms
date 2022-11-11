@@ -7,6 +7,51 @@ class GradeHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          showModalBottomSheet(
+              context: context,
+              builder: (BuildContext context) => Container(
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Subject Name"),
+                            Expanded(
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.black))),
+                                keyboardType: TextInputType.phone,
+                                validator: (val) {},
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Subject Code"),
+                            Expanded(
+                                child: TextFormField(
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.black))),
+                              keyboardType: TextInputType.phone,
+                              validator: (val) {},
+                            )),
+                          ],
+                        )
+                      ],
+                    ),
+                  ));
+        },
+      ),
       appBar: AppBar(
         backgroundColor: Colors.deepPurple,
         shape: RoundedRectangleBorder(
@@ -45,21 +90,6 @@ class GradeHome extends StatelessWidget {
                             builder: (BuildContext context) =>
                                 SubjectGrade(subject: "Subject1")));
                   },
-                ),
-                ListTile(
-                  tileColor: Colors.grey,
-                  title: Text("Subject2"),
-                  onTap: () {},
-                ),
-                ListTile(
-                  tileColor: Colors.grey,
-                  title: Text("Subject3"),
-                  onTap: () {},
-                ),
-                ListTile(
-                  tileColor: Colors.grey,
-                  title: Text("Subject4"),
-                  onTap: () {},
                 ),
               ],
             )

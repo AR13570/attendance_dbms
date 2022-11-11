@@ -50,24 +50,50 @@ class _HomePageState extends State<HomePage> {
         child: Center(
           child: Column(
             children: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                AttendaceHome()));
-                  },
-                  child: Text("Attendance")),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => GradeHome()));
-                  },
-                  child: Text("Grades")),
-              ElevatedButton(onPressed: () {}, child: Text("Students"))
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    AttendaceHome()));
+                      },
+                      child: Container(
+                          width: 150,
+                          height: 100,
+                          color: Colors.grey,
+                          child: Text("Attendance"))),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    GradeHome()));
+                      },
+                      child: Container(
+                          width: 150,
+                          height: 100,
+                          color: Colors.grey,
+                          child: Text("Grades"))),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              InkWell(
+                  onTap: () {},
+                  child: Container(
+                      width: 300,
+                      height: 100,
+                      color: Colors.grey,
+                      child: Text("Students"))),
             ],
           ),
         ),
