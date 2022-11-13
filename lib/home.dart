@@ -1,5 +1,6 @@
 import 'package:attendance_dbms/attendance.dart';
 import 'package:attendance_dbms/grade_home.dart';
+import 'package:attendance_dbms/student_details.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -92,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (BuildContext context) => GradeHome()));
+                            builder: (BuildContext context) => Students()));
                   },
                   child: Container(
                       width: 300,
