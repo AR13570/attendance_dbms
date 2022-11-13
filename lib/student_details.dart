@@ -82,13 +82,14 @@ class Students extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(children: [
             Text("Students"),
-            FutureBuilder(
+            FutureBuilder<List<Map>>(
                 future: MongoDatabase.getstudent(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     print(snapshot.data);
                     return ListView.builder(
                         shrinkWrap: true,
+                        itemCount: snapshot.data!.length,
                         itemBuilder: (BuildContext _, int index) =>
                             ExpansionTile(
                               title: Text(snapshot.data![index]['student']),
