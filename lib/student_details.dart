@@ -28,21 +28,22 @@ class Students extends StatelessWidget {
                                       border: OutlineInputBorder(
                                           borderSide:
                                               BorderSide(color: Colors.black))),
-                                  validator: (val) {
-
-                                  },
+                                  validator: (val) {},
                                 ),
                               ),
                             ],
                           ),
                           OutlinedButton(
-                              onPressed: () async{
-                                bool state = await MongoDatabase.addstudent(name.text);
-                                if(state == true)
-                                Navigator.pop(context);
+                              onPressed: () async {
+                                bool state =
+                                    await MongoDatabase.addstudent(name.text);
+                                if (state == true)
+                                  Navigator.pop(context);
                                 else
-                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Student Exist")));
-                              }, child: Text("Submit"))
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text("Student Exist")));
+                              },
+                              child: Text("Submit"))
                         ],
                       ),
                     ));
@@ -81,23 +82,31 @@ class Students extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(children: [
             Text("Students"),
-            ListView(
-              shrinkWrap: true,
-              children: [
-                ExpansionTile(
-                  title: Text("student1"),
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [Text("Test 1"), Text("29")],
-                      ),
-                    )
-                  ],
-                )
-              ],
-            )
+            FutureBuilder(
+                future: MongoDatabase.getstudent(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    print(snapshot.data);
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext _, int index) =>
+                            ExpansionTile(
+                              title: Text(snapshot.data![index]['student']),
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [Text("Test 1"), Text("29")],
+                                  ),
+                                )
+                              ],
+                            ));
+                  } else
+                    return CircularProgressIndicator();
+                })
           ]),
         ));
   }
