@@ -1,7 +1,10 @@
+import 'package:attendance_dbms/mongodb.dart';
 import 'package:flutter/material.dart';
 
 class Students extends StatelessWidget {
-  const Students({Key? key}) : super(key: key);
+  Students({Key? key}) : super(key: key);
+
+  TextEditingController name = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -20,17 +23,26 @@ class Students extends StatelessWidget {
                               Text("Student Name"),
                               Expanded(
                                 child: TextFormField(
+                                  controller: name,
                                   decoration: InputDecoration(
                                       border: OutlineInputBorder(
                                           borderSide:
                                               BorderSide(color: Colors.black))),
-                                  validator: (val) {},
+                                  validator: (val) {
+
+                                  },
                                 ),
                               ),
                             ],
                           ),
                           OutlinedButton(
-                              onPressed: () {}, child: Text("Submit"))
+                              onPressed: () async{
+                                bool state = await MongoDatabase.addstudent(name.text);
+                                if(state == true)
+                                Navigator.pop(context);
+                                else
+                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Student Exist")));
+                              }, child: Text("Submit"))
                         ],
                       ),
                     ));

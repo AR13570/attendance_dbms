@@ -7,8 +7,7 @@ class MongoDatabase {
 
   //Login
   static Future<bool> loginpage(user, pass) async {
-    var db = await Db.create(
-        "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
+    var db = await Db.create("mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
     inspect(db);
     var coll = db.collection('Teacher');
@@ -27,8 +26,7 @@ class MongoDatabase {
   //Add Subjects in DB
   static Future<bool> addsubject(subject) async {
     var teacher = "Teacher";
-    var db = await Db.create(
-        "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
+    var db = await Db.create("mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
     inspect(db);
     var coll = db.collection('Subject');
@@ -45,15 +43,13 @@ class MongoDatabase {
 
   //Add Students into DB
   static Future<bool> addstudent(student) async {
-    var teacher = "Teacher";
-    var db = await Db.create(
-        "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
+    String teacher = "Teacher";
+    var db = await Db.create("mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
     inspect(db);
     var coll = db.collection('Student');
     // Fluent way
-    var data =
-        await coll.find({'student': student, 'teacher': teacher}).toList();
+    var data = await coll.find({'student': student, 'teacher': teacher}).toList();
     if (data.isEmpty) {
       await coll.insertOne({'student': student, 'teacher': teacher});
       return true;
@@ -65,8 +61,7 @@ class MongoDatabase {
   //Add Attendance into DB
   static Future<bool> addattendance(date, studentpresent) async {
     var teacher = "Teacher";
-    var db = await Db.create(
-        "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
+    var db = await Db.create("mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
     inspect(db);
     var coll = db.collection('Attendance');
@@ -87,8 +82,7 @@ class MongoDatabase {
   //Add Marks into DB
   static Future<bool> addmarks(exam, studentmarks) async {
     var teacher = "Teacher";
-    var db = await Db.create(
-        "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
+    var db = await Db.create("mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
     inspect(db);
     var coll = db.collection('Scores');
@@ -109,8 +103,7 @@ class MongoDatabase {
   //Get Student List from DB
   static Future<List<Map<String, dynamic>>> getstudent() async {
     var teacher = "Teacher";
-    var db = await Db.create(
-        "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
+    var db = await Db.create("mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
     inspect(db);
     var coll = db.collection('Student');
@@ -123,8 +116,7 @@ class MongoDatabase {
   //Get Marks List from DB
   static Future<List<Map<String, dynamic>>> getmarks(subject) async {
     var teacher = "Teacher";
-    var db = await Db.create(
-        "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
+    var db = await Db.create("mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
     inspect(db);
     var coll = db.collection('Scores');
@@ -137,8 +129,7 @@ class MongoDatabase {
   //Get Subject List from DB
   static Future<List<Map<String, dynamic>>> getsubjects(subject) async {
     var teacher = "Teacher";
-    var db = await Db.create(
-        "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
+    var db = await Db.create("mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
     inspect(db);
     var coll = db.collection('Subject');
@@ -150,8 +141,7 @@ class MongoDatabase {
   //Get Attendance List from DB
   static Future<List<Map<String, dynamic>>> getattendance(date) async {
     var teacher = "Teacher";
-    var db = await Db.create(
-        "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
+    var db = await Db.create("mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
     inspect(db);
     var coll = db.collection('Attendance');
@@ -164,16 +154,15 @@ class MongoDatabase {
   static Future<List<Map<String, dynamic>>> getstudentperformance(
       student) async {
     var teacher = "Teacher";
-    var db = await Db.create(
-        "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
+    var db = await Db.create("mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
     inspect(db);
     //Get Attendance
     var coll1 = db.collection('Attendance');
-    var data1 = await coll1.find({'student': student}).toList();
+    var data1 = await coll1.find({'teacher': teacher}).toList();
     //Get Marks
     var coll2 = db.collection('Scores');
-    var data2 = await coll2.find({'student': student}).toList();
+    var data2 = await coll2.find({'teacher': teacher}).toList();
     //Return
     return [
       {"Attendance": data1, "Scores": data2}
