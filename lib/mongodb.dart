@@ -24,7 +24,7 @@ class MongoDatabase {
   }
 
   //Add Subjects in DB
-  static Future<bool> addsubject(subject) async {
+  static Future<bool> addsubject(subject,subjectcode) async {
     var teacher = "Teacher";
     var db = await Db.create("mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
@@ -34,7 +34,7 @@ class MongoDatabase {
     var data =
         await coll.find({'subject': subject, 'teacher': teacher}).toList();
     if (data.isEmpty) {
-      await coll.insertOne({'subject': subject, 'teacher': teacher});
+      await coll.insertOne({'subject': subject,'subject_code': subjectcode, 'teacher': teacher});
       return true;
     } else {
       return false;

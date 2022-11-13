@@ -1,8 +1,13 @@
 import 'package:attendance_dbms/subject_grade.dart';
 import 'package:flutter/material.dart';
 
+import 'mongodb.dart';
+
 class GradeHome extends StatelessWidget {
-  const GradeHome({Key? key}) : super(key: key);
+  GradeHome({Key? key}) : super(key: key);
+
+  TextEditingController subject = TextEditingController();
+  TextEditingController subjectcode = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +27,12 @@ class GradeHome extends StatelessWidget {
                             Text("Subject Name"),
                             Expanded(
                               child: TextFormField(
+                                controller: subject,
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                         borderSide:
                                             BorderSide(color: Colors.black))),
-                                keyboardType: TextInputType.phone,
+                                keyboardType: TextInputType.text,
                                 validator: (val) {},
                               ),
                             ),
@@ -38,15 +44,24 @@ class GradeHome extends StatelessWidget {
                             Text("Subject Code"),
                             Expanded(
                                 child: TextFormField(
+                                  controller: subjectcode,
                               decoration: InputDecoration(
                                   border: OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Colors.black))),
-                              keyboardType: TextInputType.phone,
+                              keyboardType: TextInputType.text,
                               validator: (val) {},
                             )),
                           ],
-                        )
+                        ),
+                        OutlinedButton(
+                            onPressed: () async{
+                              bool state = await MongoDatabase.addsubject(subject.text,subjectcode.text);
+                              if(state == true)
+                                Navigator.pop(context);
+                              else
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Student Exist")));
+                            }, child: Text("Submit"))
                       ],
                     ),
                   ));
