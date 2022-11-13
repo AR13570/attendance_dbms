@@ -88,7 +88,12 @@ class _HomePageState extends State<HomePage> {
                 height: 20,
               ),
               InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => GradeHome()));
+                  },
                   child: Container(
                       width: 300,
                       height: 100,
