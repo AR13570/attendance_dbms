@@ -6,6 +6,36 @@ class Students extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) => Container(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Student Name"),
+                              Expanded(
+                                child: TextFormField(
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.black))),
+                                  validator: (val) {},
+                                ),
+                              ),
+                            ],
+                          ),
+                          OutlinedButton(
+                              onPressed: () {}, child: Text("Submit"))
+                        ],
+                      ),
+                    ));
+          },
+        ),
         appBar: AppBar(
           backgroundColor: Colors.deepPurple,
           shape: RoundedRectangleBorder(

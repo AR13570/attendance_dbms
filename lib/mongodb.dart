@@ -116,6 +116,7 @@ class MongoDatabase {
     var coll = db.collection('Student');
     // Fluent way
     var data = await coll.find({'teacher': teacher}).toList();
+
     return data;
   }
 
