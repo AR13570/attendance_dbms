@@ -135,7 +135,7 @@ class _AttendaceHomeState extends State<AttendaceHome> {
                       DateFormat('dd-MM-yyyy').format(selectedDate)),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      print(snapshot.data);
+                      // print(snapshot.data);
                       return ListView.builder(
                           physics: ClampingScrollPhysics(),
                           shrinkWrap: true,

@@ -68,6 +68,7 @@ class MongoDatabase {
 
   //Add Attendance into DB
   static Future<bool> addattendance(date, studentpresent) async {
+    print(studentpresent.length);
     var teacher = "Teacher";
     var db = await Db.create(
         "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
@@ -84,7 +85,19 @@ class MongoDatabase {
     if (!data.isEmpty) {
       await coll.deleteMany({'date': date, 'teacher': teacher});
     }
-    await coll.insertMany(studentpresent);
+
+    for (var i = 0; i < studentpresent.length; i++)
+   {
+     var student = studentpresent[i]['student'];
+     var pre = studentpresent[i]['attendance'];
+     await coll.insertOne({
+     'student': student,
+       'attendance': pre,
+     'date': date,
+     'teacher': teacher
+   });
+  }
+
     return true;
   }
 
@@ -98,7 +111,6 @@ class MongoDatabase {
     var coll = db.collection('Scores');
     //Add date and teacher into studentmarks list
     for (int i = 0; i < studentmarks.length; i++) {
-      studentmarks[i]['exam'] = exam;
       studentmarks[i]['teacher'] = teacher;
     }
     // Fluent way
@@ -166,7 +178,6 @@ class MongoDatabase {
       data[i]['half_yearly'] = x?['half_yearly'] ?? 0;
       data[i]['finals'] = x?['finals'] ?? 0;
     }
-    print(data);
     return data;
   }
 
