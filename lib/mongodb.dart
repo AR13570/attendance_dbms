@@ -110,7 +110,7 @@ class MongoDatabase {
     return true;
   }
 
-  static Future<bool> addIndivMarks(student, subject, half, fin) async {
+  static addIndivMarks(student, subject, String half, String fin) async {
     var teacher = "Teacher";
     var db = await Db.create(
         "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
@@ -126,11 +126,10 @@ class MongoDatabase {
     await coll.insertOne({
       "teacher": teacher,
       "student": student,
-      "half_yearly": half,
-      "finals": fin,
+      "half_yearly": double.parse(half),
+      "finals": double.parse(fin),
       "subject": subject
     });
-    return true;
   }
 
   //Get Student List from DB

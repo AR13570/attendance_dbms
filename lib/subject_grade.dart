@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'mongodb.dart';
 
-class SubjectGrade extends StatelessWidget {
+class SubjectGrade extends StatefulWidget {
   String subject;
   SubjectGrade({Key? key, required this.subject}) : super(key: key);
 
+  @override
+  State<SubjectGrade> createState() => _SubjectGradeState();
+}
+
+class _SubjectGradeState extends State<SubjectGrade> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +25,7 @@ class SubjectGrade extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              subject,
+              widget.subject,
               style: TextStyle(fontSize: 30, color: Colors.white),
             ),
           ],
@@ -34,7 +39,7 @@ class SubjectGrade extends StatelessWidget {
               style: TextStyle(fontSize: 33),
             ),
             FutureBuilder<List<Map>>(
-                future: MongoDatabase.getmarks(subject),
+                future: MongoDatabase.getmarks(widget.subject),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     print(snapshot.data);
@@ -44,7 +49,7 @@ class SubjectGrade extends StatelessWidget {
                         itemBuilder: (BuildContext _, int index) {
                           return subjectMarksList(
                             snapshot.data![index]['student'],
-                            subject,
+                            widget.subject,
                             snapshot.data![index]['half_yearly'],
                             snapshot.data![index]['finals'],
                           );
@@ -78,16 +83,13 @@ class SubjectGrade extends StatelessWidget {
                 children: [
                   Text("Half Yearly"),
                   Container(
-                      width: 60,
+                      width: 100,
                       child: TextFormField(
                         controller: _hf,
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black))),
-                        keyboardType: TextInputType.phone,
-                        onChanged: (str) {
-                          _hf.text = str;
-                        },
+                        keyboardType: TextInputType.number,
                       ))
                 ],
               ),
@@ -99,21 +101,24 @@ class SubjectGrade extends StatelessWidget {
                 children: [
                   Text("Finals"),
                   Container(
-                      width: 60,
+                      width: 100,
                       child: TextFormField(
                         controller: _fin,
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black))),
                         keyboardType: TextInputType.phone,
-                        onChanged: (str) {
-                          _fin.text = str;
-                        },
                       ))
                 ],
               ),
             ),
-            OutlinedButton(onPressed: () {}, child: Text("Submit"))
+            OutlinedButton(
+                onPressed: () {
+                  MongoDatabase.addIndivMarks(
+                      student, sub, _hf.text, _fin.text);
+                  setState(() {});
+                },
+                child: Text("Submit"))
           ],
         )
       ],
