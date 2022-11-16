@@ -3,10 +3,16 @@ import 'package:flutter/material.dart';
 
 import 'mongodb.dart';
 
-class GradeHome extends StatelessWidget {
+class GradeHome extends StatefulWidget {
   GradeHome({Key? key}) : super(key: key);
 
+  @override
+  State<GradeHome> createState() => _GradeHomeState();
+}
+
+class _GradeHomeState extends State<GradeHome> {
   TextEditingController subject = TextEditingController();
+
   TextEditingController subjectcode = TextEditingController();
 
   @override
@@ -58,7 +64,9 @@ class GradeHome extends StatelessWidget {
                             onPressed: () async{
                               bool state = await MongoDatabase.addsubject(subject.text,subjectcode.text);
                               if(state == true)
-                                Navigator.pop(context);
+                                setState(() {
+                                  Navigator.pop(context);
+                                });
                               else
                                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Student Exist")));
                             }, child: Text("Submit"))
@@ -91,23 +99,32 @@ class GradeHome extends StatelessWidget {
               "Choose subject",
               style: TextStyle(fontSize: 33),
             ),
-            ListView(
-              padding: EdgeInsets.all(8),
-              shrinkWrap: true,
-              children: [
-                ListTile(
-                  tileColor: Colors.grey,
-                  title: Text("Subject1"),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                SubjectGrade(subject: "Subject1")));
-                  },
-                ),
-              ],
-            )
+            FutureBuilder<List<Map>>(
+                future: MongoDatabase.getsubjects(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    print(snapshot.data);
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (BuildContext _, int index) =>
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ListTile(
+                                tileColor: Colors.grey,
+                                title: Text(snapshot.data![index]['subject']),
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              SubjectGrade(subject: snapshot.data![index]['subject'])));
+                                },
+                              ),
+                            ),);
+                  } else
+                    return CircularProgressIndicator();
+                }),
           ],
         ),
       ),

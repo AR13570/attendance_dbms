@@ -134,11 +134,21 @@ class MongoDatabase {
     // Fluent way
     var data =
         await coll.find({'teacher': teacher, 'subject': subject}).toList();
+    if(data.length == 0)
+    {
+      coll = db.collection("Student");
+      data = await coll.find({'teacher': teacher}).toList();
+      for(int i = 0;i<data.length;i++)
+      {
+        data[i]['half_yearly'] = 0;
+        data[i]['finals'] = 0;
+      }
+    }
     return data;
   }
 
   //Get Subject List from DB
-  static Future<List<Map<String, dynamic>>> getsubjects(subject) async {
+  static Future<List<Map<String, dynamic>>> getsubjects() async {
     var teacher = "Teacher";
     var db = await Db.create(
         "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
