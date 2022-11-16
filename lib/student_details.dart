@@ -1,9 +1,14 @@
 import 'package:attendance_dbms/mongodb.dart';
 import 'package:flutter/material.dart';
 
-class Students extends StatelessWidget {
+class Students extends StatefulWidget {
   Students({Key? key}) : super(key: key);
 
+  @override
+  State<Students> createState() => _StudentsState();
+}
+
+class _StudentsState extends State<Students> {
   TextEditingController name = TextEditingController();
 
   @override
@@ -37,11 +42,14 @@ class Students extends StatelessWidget {
                               onPressed: () async {
                                 bool state =
                                     await MongoDatabase.addstudent(name.text);
-                                if (state == true)
-                                  Navigator.pop(context);
-                                else
+                                if (state == true) {
+                                  setState(() {
+                                    Navigator.pop(context);
+                                  });
+                                } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(content: Text("Student Exist")));
+                                }
                               },
                               child: Text("Submit"))
                         ],
