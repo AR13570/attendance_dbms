@@ -120,7 +120,6 @@ class MongoDatabase {
     var coll = db.collection('Student');
     // Fluent way
     var data = await coll.find({'teacher': teacher}).toList();
-
     return data;
   }
 
@@ -161,6 +160,11 @@ class MongoDatabase {
     var coll = db.collection('Attendance');
     // Fluent way
     var data = await coll.find({'teacher': teacher, 'date': date}).toList();
+    if(data.length == 0)
+      {
+        coll = db.collection("Student");
+        data = await coll.find({'teacher': teacher}).toList();
+      }
     return data;
   }
 
