@@ -164,6 +164,10 @@ class MongoDatabase {
       {
         coll = db.collection("Student");
         data = await coll.find({'teacher': teacher}).toList();
+        for(int i = 0;i<data.length;i++)
+          {
+            data[i]['attendance'] = false;
+          }
       }
     return data;
   }
