@@ -75,7 +75,7 @@ class MongoDatabase {
     inspect(db);
     var coll = db.collection('Attendance');
     //Add date and teacher into studentpresent list
-    for (int i = 0; i < studentpresent.length(); i++) {
+    for (int i = 0; i < studentpresent.length; i++) {
       studentpresent[i]['date'] = date;
       studentpresent[i]['teacher'] = teacher;
     }
@@ -97,7 +97,7 @@ class MongoDatabase {
     inspect(db);
     var coll = db.collection('Scores');
     //Add date and teacher into studentmarks list
-    for (int i = 0; i < studentmarks.length(); i++) {
+    for (int i = 0; i < studentmarks.length; i++) {
       studentmarks[i]['exam'] = exam;
       studentmarks[i]['teacher'] = teacher;
     }
@@ -134,12 +134,10 @@ class MongoDatabase {
     // Fluent way
     var data =
         await coll.find({'teacher': teacher, 'subject': subject}).toList();
-    if(data.length == 0)
-    {
+    if (data.length == 0) {
       coll = db.collection("Student");
       data = await coll.find({'teacher': teacher}).toList();
-      for(int i = 0;i<data.length;i++)
-      {
+      for (int i = 0; i < data.length; i++) {
         data[i]['half_yearly'] = 0;
         data[i]['finals'] = 0;
       }
@@ -170,15 +168,15 @@ class MongoDatabase {
     var coll = db.collection('Attendance');
     // Fluent way
     var data = await coll.find({'teacher': teacher, 'date': date}).toList();
-    if(data.length == 0)
-      {
-        coll = db.collection("Student");
-        data = await coll.find({'teacher': teacher}).toList();
-        for(int i = 0;i<data.length;i++)
-          {
-            data[i]['attendance'] = false;
-          }
+    if (data.length == 0) {
+      coll = db.collection("Student");
+      data = await coll.find({'teacher': teacher}).toList();
+      for (int i = 0; i < data.length; i++) {
+        data[i]['attendance'] = false;
+        //data[i]['date'] = date;
       }
+    }
+    print(data);
     return data;
   }
 
