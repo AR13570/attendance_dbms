@@ -86,17 +86,16 @@ class MongoDatabase {
       await coll.deleteMany({'date': date, 'teacher': teacher});
     }
 
-    for (var i = 0; i < studentpresent.length; i++)
-   {
-     var student = studentpresent[i]['student'];
-     var pre = studentpresent[i]['attendance'];
-     await coll.insertOne({
-     'student': student,
-       'attendance': pre,
-     'date': date,
-     'teacher': teacher
-   });
-  }
+    for (var i = 0; i < studentpresent.length; i++) {
+      var student = studentpresent[i]['student'];
+      var pre = studentpresent[i]['attendance'];
+      await coll.insertOne({
+        'student': student,
+        'attendance': pre,
+        'date': date,
+        'teacher': teacher
+      });
+    }
 
     return true;
   }
@@ -201,18 +200,16 @@ class MongoDatabase {
         "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
     inspect(db);
-    var coll = db.collection('Attendance');
+    var attend = db.collection('Attendance');
     // Fluent way
-    var data = await coll.find({'teacher': teacher, 'date': date}).toList();
-    if (data.length == 0) {
-      coll = db.collection("Student");
-      data = await coll.find({'teacher': teacher}).toList();
-      for (int i = 0; i < data.length; i++) {
-        data[i]['attendance'] = false;
-        //data[i]['date'] = date;
-      }
+    var coll = db.collection("Student");
+    var data = await coll.find({'teacher': teacher}).toList();
+    for (int i = 0; i < data.length; i++) {
+      var x = await attend.findOne(
+          {'teacher': teacher, 'student': data[i]['student'], 'date': date});
+      data[i]['attendance'] = x?['attendance'] ?? false;
     }
-
+    print(data);
     return data;
   }
 

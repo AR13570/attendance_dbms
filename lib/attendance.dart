@@ -107,11 +107,8 @@ class _AttendaceHomeState extends State<AttendaceHome> {
                     //   );
                     // },
                     onTap: (CalendarTapDetails x) async {
-                      if (x.date == null) {
-                        selectedDate = DateTime.now();
-                      } else {
-                        selectedDate = x.date!;
-                      }
+                      selectedDate = x.date!;
+                      setState(() {});
                       attendanceDeets = [];
                       var temp = await MongoDatabase.getattendance(
                           DateFormat('dd-MM-yyyy').format(selectedDate));
