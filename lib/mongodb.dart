@@ -75,7 +75,7 @@ class MongoDatabase {
     inspect(db);
     var coll = db.collection('Attendance');
     //Add date and teacher into studentpresent list
-    for (int i = 0; i < studentpresent.length(); i++) {
+    for (int i = 0; i < studentpresent.length; i++) {
       studentpresent[i]['date'] = date;
       studentpresent[i]['teacher'] = teacher;
     }
