@@ -41,8 +41,14 @@ class SubjectGrade extends StatelessWidget {
                     return ListView.builder(
                         shrinkWrap: true,
                         itemCount: snapshot.data!.length,
-                        itemBuilder: (BuildContext _, int index) =>
-                            subjectMarksList(snapshot.data![index]['student'],snapshot.data![index]['half_yearly'],snapshot.data![index]['finals']));
+                        itemBuilder: (BuildContext _, int index) {
+                          return subjectMarksList(
+                            snapshot.data![index]['student'],
+                            subject,
+                            snapshot.data![index]['half_yearly'],
+                            snapshot.data![index]['finals'],
+                          );
+                        });
                   } else
                     return CircularProgressIndicator();
                 }),
@@ -52,55 +58,65 @@ class SubjectGrade extends StatelessWidget {
     );
   }
 
-  ExpansionTile subjectMarksList(student,hy,finals) {
+  Widget subjectMarksList(
+    student,
+    sub,
+    hy,
+    finals,
+  ) {
+    TextEditingController _hf = TextEditingController(text: hy.toString());
+    TextEditingController _fin = TextEditingController(text: finals.toString());
     return ExpansionTile(
-                title: Text(student),
+      title: Text(student),
+      children: [
+        Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Half Yearly"),
-                            Container(
-                                width: 40,
-                                child: TextFormField(
-                                  initialValue: hy.toString(),
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.black))),
-                                  keyboardType: TextInputType.phone,
-                                  validator: (val) {},
-                                ))
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Finals"),
-                            Container(
-                                width: 40,
-                                child: TextFormField(
-                                  initialValue: finals.toString(),
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderSide:
-                                          BorderSide(color: Colors.black))),
-                                  keyboardType: TextInputType.phone,
-                                  validator: (val) {},
-                                ))
-                          ],
-                        ),
-                      ),
-                    ],
-                  )
+                  Text("Half Yearly"),
+                  Container(
+                      width: 60,
+                      child: TextFormField(
+                        controller: _hf,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black))),
+                        keyboardType: TextInputType.phone,
+                        onChanged: (str) {
+                          _hf.text = str;
+                        },
+                      ))
                 ],
-              );
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Finals"),
+                  Container(
+                      width: 60,
+                      child: TextFormField(
+                        controller: _fin,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black))),
+                        keyboardType: TextInputType.phone,
+                        onChanged: (str) {
+                          _fin.text = str;
+                        },
+                      ))
+                ],
+              ),
+            ),
+            OutlinedButton(onPressed: () {}, child: Text("Submit"))
+          ],
+        )
+      ],
+    );
   }
 }

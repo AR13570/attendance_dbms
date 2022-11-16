@@ -50,7 +50,7 @@ class _GradeHomeState extends State<GradeHome> {
                             Text("Subject Code"),
                             Expanded(
                                 child: TextFormField(
-                                  controller: subjectcode,
+                              controller: subjectcode,
                               decoration: InputDecoration(
                                   border: OutlineInputBorder(
                                       borderSide:
@@ -61,15 +61,18 @@ class _GradeHomeState extends State<GradeHome> {
                           ],
                         ),
                         OutlinedButton(
-                            onPressed: () async{
-                              bool state = await MongoDatabase.addsubject(subject.text,subjectcode.text);
-                              if(state == true)
+                            onPressed: () async {
+                              bool state = await MongoDatabase.addsubject(
+                                  subject.text, subjectcode.text);
+                              if (state == true)
                                 setState(() {
                                   Navigator.pop(context);
                                 });
                               else
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Student Exist")));
-                            }, child: Text("Submit"))
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text("Subject Exist")));
+                            },
+                            child: Text("Submit"))
                       ],
                     ),
                   ));
@@ -105,23 +108,25 @@ class _GradeHomeState extends State<GradeHome> {
                   if (snapshot.hasData) {
                     print(snapshot.data);
                     return ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (BuildContext _, int index) =>
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ListTile(
-                                tileColor: Colors.grey,
-                                title: Text(snapshot.data![index]['subject']),
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              SubjectGrade(subject: snapshot.data![index]['subject'])));
-                                },
-                              ),
-                            ),);
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (BuildContext _, int index) => Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          tileColor: Colors.grey,
+                          title: Text(snapshot.data![index]['subject']),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        SubjectGrade(
+                                            subject: snapshot.data![index]
+                                                ['subject'])));
+                          },
+                        ),
+                      ),
+                    );
                   } else
                     return CircularProgressIndicator();
                 }),

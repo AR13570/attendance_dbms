@@ -110,6 +110,29 @@ class MongoDatabase {
     return true;
   }
 
+  static Future<bool> addIndivMarks(student, subject, half, fin) async {
+    var teacher = "Teacher";
+    var db = await Db.create(
+        "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
+    await db.open();
+    inspect(db);
+    var coll = db.collection('Scores');
+    var data = await coll.find(
+        {'subject': subject, 'teacher': teacher, 'student': student}).toList();
+    if (!data.isEmpty) {
+      await coll.deleteMany(
+          {'subject': subject, 'teacher': teacher, 'student': student});
+    }
+    await coll.insertOne({
+      "teacher": teacher,
+      "student": student,
+      "half_yearly": half,
+      "finals": fin,
+      "subject": subject
+    });
+    return true;
+  }
+
   //Get Student List from DB
   static Future<List<Map<String, dynamic>>> getstudent() async {
     var teacher = "Teacher";
@@ -130,18 +153,21 @@ class MongoDatabase {
         "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
     inspect(db);
-    var coll = db.collection('Scores');
+    var score = db.collection('Scores');
     // Fluent way
-    var data =
-        await coll.find({'teacher': teacher, 'subject': subject}).toList();
-    if (data.length == 0) {
-      coll = db.collection("Student");
-      data = await coll.find({'teacher': teacher}).toList();
-      for (int i = 0; i < data.length; i++) {
-        data[i]['half_yearly'] = 0;
-        data[i]['finals'] = 0;
-      }
+
+    var coll = db.collection("Student");
+    var data = await coll.find({'teacher': teacher}).toList();
+    for (int i = 0; i < data.length; i++) {
+      var x = await score.findOne({
+        'teacher': teacher,
+        'subject': subject,
+        'student': data[i]['student']
+      });
+      data[i]['half_yearly'] = x?['half_yearly'] ?? 0;
+      data[i]['finals'] = x?['finals'] ?? 0;
     }
+    print(data);
     return data;
   }
 
@@ -176,7 +202,7 @@ class MongoDatabase {
         //data[i]['date'] = date;
       }
     }
-    print(data);
+
     return data;
   }
 
