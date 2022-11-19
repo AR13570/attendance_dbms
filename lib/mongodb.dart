@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:mongo_dart/mongo_dart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MongoDatabase {
+
   // var db = await Db.create("mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
 
   //Login
@@ -26,7 +28,9 @@ class MongoDatabase {
 
   //Add Subjects in DB
   static Future<bool> addsubject(subject, subjectcode) async {
-    var teacher = "Teacher";
+    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+    var teacher = await prefs.getString('Teacher');
     var db = await Db.create(
         "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
@@ -49,7 +53,9 @@ class MongoDatabase {
 
   //Add Students into DB
   static Future<bool> addstudent(student) async {
-    String teacher = "Teacher";
+    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+    var teacher = await prefs.getString('Teacher');
     var db = await Db.create(
         "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
@@ -68,8 +74,9 @@ class MongoDatabase {
 
   //Add Attendance into DB
   static Future<bool> addattendance(date, studentpresent) async {
-    print(studentpresent.length);
-    var teacher = "Teacher";
+    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+    var teacher = await prefs.getString('Teacher');
     var db = await Db.create(
         "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
@@ -96,13 +103,14 @@ class MongoDatabase {
         'teacher': teacher
       });
     }
-
     return true;
   }
 
   //Add Marks into DB
   static Future<bool> addmarks(exam, studentmarks) async {
-    var teacher = "Teacher";
+    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+    var teacher = await prefs.getString('Teacher');
     var db = await Db.create(
         "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
@@ -122,7 +130,9 @@ class MongoDatabase {
   }
 
   static addIndivMarks(student, subject, String half, String fin) async {
-    var teacher = "Teacher";
+    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+    var teacher = await prefs.getString('Teacher');
     var db = await Db.create(
         "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
@@ -145,7 +155,9 @@ class MongoDatabase {
 
   //Get Student List from DB
   static Future<List<Map<String, dynamic>>> getstudent() async {
-    var teacher = "Teacher";
+    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+    var teacher = await prefs.getString('Teacher');
     var db = await Db.create(
         "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
@@ -158,7 +170,9 @@ class MongoDatabase {
 
   //Get Marks List from DB
   static Future<List<Map<String, dynamic>>> getmarks(subject) async {
-    var teacher = "Teacher";
+    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+    var teacher = await prefs.getString('Teacher');
     var db = await Db.create(
         "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
@@ -182,7 +196,9 @@ class MongoDatabase {
 
   //Get Subject List from DB
   static Future<List<Map<String, dynamic>>> getsubjects() async {
-    var teacher = "Teacher";
+    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+    var teacher = await prefs.getString('Teacher');
     var db = await Db.create(
         "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
@@ -195,7 +211,9 @@ class MongoDatabase {
 
   //Get Attendance List from DB
   static Future<List<Map<String, dynamic>>> getattendance(date) async {
-    var teacher = "Teacher";
+    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+    var teacher = await prefs.getString('Teacher');
     var db = await Db.create(
         "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();
@@ -209,14 +227,15 @@ class MongoDatabase {
           {'teacher': teacher, 'student': data[i]['student'], 'date': date});
       data[i]['attendance'] = x?['attendance'] ?? false;
     }
-    print(data);
     return data;
   }
 
   //Get Detail of individual Student's Attendance and Marks information
   static Future<List<Map<String, dynamic>>> getstudentperformance(
       student) async {
-    var teacher = "Teacher";
+    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+    var teacher = await prefs.getString('Teacher');
     var db = await Db.create(
         "mongodb+srv://dbms:dbms@cluster0.txlqt8w.mongodb.net/School?retryWrites=true&w=majority");
     await db.open();

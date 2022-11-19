@@ -1,6 +1,7 @@
 import 'package:attendance_dbms/home.dart';
 import 'package:attendance_dbms/mongodb.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginDemo extends StatefulWidget {
   const LoginDemo({Key? key}) : super(key: key);
@@ -10,9 +11,24 @@ class LoginDemo extends StatefulWidget {
 }
 
 class _LoginDemoState extends State<LoginDemo> {
-
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+
+  loginpage() async {
+    final SharedPreferences prefs = await _prefs;
+    bool check = prefs.getBool('check') ?? false;
+    if(check == true)
+      {
+        Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage(user: prefs.getString('Teacher'))));
+      }
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loginpage();
+  }
 
   var log = "LOGIN";
 
@@ -20,7 +36,10 @@ class _LoginDemoState extends State<LoginDemo> {
     bool check = await MongoDatabase.loginpage(email.text,password.text);
     if(check == true) {
       log = "LOGIN";
-      Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
+      final SharedPreferences prefs = await _prefs;
+      await prefs.setString('Teacher', email.text);
+      await prefs.setBool('check', true);
+      Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage(user: prefs.getString('Teacher'))));
     }
     else{
       setState(() {

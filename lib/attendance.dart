@@ -108,10 +108,12 @@ class _AttendaceHomeState extends State<AttendaceHome> {
                     // },
                     onTap: (CalendarTapDetails x) async {
                       selectedDate = x.date!;
-                      setState(() {});
+                      // setState(() {});
                       attendanceDeets = [];
                       var temp = await MongoDatabase.getattendance(
                           DateFormat('dd-MM-yyyy').format(selectedDate));
+                      print("A");
+                      setState(() {});
                       attendanceDeets.length = temp.length;
                     },
                     monthViewSettings: MonthViewSettings(
@@ -132,6 +134,7 @@ class _AttendaceHomeState extends State<AttendaceHome> {
                       DateFormat('dd-MM-yyyy').format(selectedDate)),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
+                      print("C"+selectedDate.toString());
                       // print(snapshot.data);
                       return ListView.builder(
                           physics: ClampingScrollPhysics(),
@@ -165,6 +168,7 @@ class _AttendaceHomeState extends State<AttendaceHome> {
               InkWell(
                   onTap: () async {
                     print(attendanceDeets);
+                    print("B");
                     await MongoDatabase.addattendance(
                         DateFormat('dd-MM-yyyy').format(selectedDate),
                         attendanceDeets);

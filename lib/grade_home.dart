@@ -108,6 +108,7 @@ class _GradeHomeState extends State<GradeHome> {
                   if (snapshot.hasData) {
                     print(snapshot.data);
                     return ListView.builder(
+                      physics: ClampingScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: snapshot.data!.length,
                       itemBuilder: (BuildContext _, int index) => Padding(

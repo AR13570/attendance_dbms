@@ -2,9 +2,11 @@ import 'package:attendance_dbms/attendance.dart';
 import 'package:attendance_dbms/grade_home.dart';
 import 'package:attendance_dbms/student_details.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final String user;
+  const HomePage({Key? key,required this.user}) : super(key: key);
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -39,7 +41,7 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(fontSize: 30, color: Colors.white),
                 ),
                 Text(
-                  "User",
+                  widget.user,
                   style: TextStyle(fontSize: 30, color: Colors.white),
                 )
               ],

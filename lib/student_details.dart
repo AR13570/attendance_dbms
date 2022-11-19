@@ -96,6 +96,7 @@ class _StudentsState extends State<Students> {
                   if (snapshot.hasData) {
                     print(snapshot.data);
                     return ListView.builder(
+                        physics: ClampingScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: snapshot.data!.length,
                         itemBuilder: (BuildContext _, int index) =>

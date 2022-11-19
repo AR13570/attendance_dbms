@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'home.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           primarySwatch: Colors.blue,
         ),
-        home: HomePage()
+        home: LoginDemo()
         //LoginDemo()
 
         );
