@@ -101,6 +101,7 @@ class _AttendaceHomeState extends State<AttendaceHome> {
                       print("A");
                       setState(() {});
                       attendanceDeets.length = temp.length;
+                      submitted = false;
                     },
                     monthViewSettings: MonthViewSettings(
                       showTrailingAndLeadingDates: false,
@@ -145,10 +146,8 @@ class _AttendaceHomeState extends State<AttendaceHome> {
                                     title:
                                         Text(snapshot.data![index]['student']),
                                     trailing: CupertinoSwitch(
-                                        value: snapshot.data![index]
+                                        value: attendanceDeets[index]
                                             ['attendance'],
-                                        // attendanceDeets[index]
-                                        //     ['attendance'],
                                         onChanged: (bool x) {
                                           setState(() {
                                             attendanceDeets[index]
