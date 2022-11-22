@@ -22,6 +22,8 @@ class _AttendaceHomeState extends State<AttendaceHome> {
   List attendanceDeets = [];
   bool submitted = false;
   DateTime selectedDate = DateTime.now();
+  int dummy = 0;
+  bool check = false;
 
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -33,13 +35,11 @@ class _AttendaceHomeState extends State<AttendaceHome> {
             borderRadius: BorderRadius.vertical(bottom: Radius.circular(40))),
         toolbarHeight: 80,
         centerTitle: true,
-        title: Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: Text(
-              "Attendance",
-              style: TextStyle(fontSize: 30, color: Colors.white),
-            ),
+        title: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          child: Text(
+            "Attendance",
+            style: TextStyle(fontSize: 30, color: Colors.white),
           ),
         ),
       ),
@@ -94,12 +94,11 @@ class _AttendaceHomeState extends State<AttendaceHome> {
                     // },
                     onTap: (CalendarTapDetails x) async {
                       selectedDate = x.date!;
-                      // setState(() {});
                       attendanceDeets = [];
+                      setState(() {
+                      });
                       var temp = await MongoDatabase.getattendance(
                           DateFormat('dd-MM-yyyy').format(selectedDate));
-                      print("A");
-                      setState(() {});
                       attendanceDeets.length = temp.length;
                       submitted = false;
                     },
@@ -112,6 +111,28 @@ class _AttendaceHomeState extends State<AttendaceHome> {
                   ),
                 ),
               ),
+              InkWell(
+                  onTap: () {
+                    setState(() {
+
+                    });
+                  },
+                  child: Container(
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 2,
+                            color: Colors.green,
+                          ),
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(20)),
+                      width: 150,
+                      child: Center(
+                        child: Text(
+                          "Check",
+                          style: TextStyle(fontSize: 20,color:Colors.white),
+                        ),
+                      ))),
               FutureBuilder<List<Map>>(
                   future: MongoDatabase.getattendance(
                       DateFormat('dd-MM-yyyy').format(selectedDate)),
@@ -119,6 +140,14 @@ class _AttendaceHomeState extends State<AttendaceHome> {
                     if (snapshot.hasData ||
                         snapshot.connectionState != ConnectionState.waiting) {
                       if (snapshot.data!.isNotEmpty) {
+                        if(snapshot.data![0]['date'] != DateFormat('dd-MM-yyyy').format(selectedDate))
+                          {
+                            setState(() {
+
+                            });
+                            return Text("Wait");
+                          }
+                        else
                         return Column(
                           children: [
                             Text(
@@ -159,7 +188,6 @@ class _AttendaceHomeState extends State<AttendaceHome> {
                             InkWell(
                                 onTap: () async {
                                   print(attendanceDeets);
-                                  print("B");
                                   await MongoDatabase.addattendance(
                                       DateFormat('dd-MM-yyyy')
                                           .format(selectedDate),

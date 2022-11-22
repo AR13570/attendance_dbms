@@ -12,6 +12,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  logout() async {
+    final SharedPreferences prefs = await _prefs;
+    bool check = prefs.getBool('check') ?? false;
+    prefs.setBool('check', false);
+      Navigator.pop(context);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,6 +134,29 @@ class _HomePageState extends State<HomePage> {
                       child: Center(
                         child: Text(
                           "Students",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ))),
+              SizedBox(
+                height: 20,
+              ),
+              InkWell(
+                  onTap: () {
+                    logout();
+                  },
+                  child: Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 2,
+                            color: Colors.redAccent,
+                          ),
+                          borderRadius: BorderRadius.circular(20)),
+                      width: 150,
+                      height: 100,
+                      child: Center(
+                        child: Text(
+                          "Log Out",
                           style: TextStyle(fontSize: 20),
                         ),
                       ))),
