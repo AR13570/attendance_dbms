@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   final String user;
-  const HomePage({Key? key,required this.user}) : super(key: key);
+  const HomePage({Key? key, required this.user}) : super(key: key);
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -19,39 +19,36 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.deepPurple,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(bottom: Radius.circular(40))),
-        toolbarHeight: 100,
+        toolbarHeight: 90,
         title: Row(
           children: [
-            CircleAvatar(
-              radius: 30,
-              child: Icon(
-                Icons.person,
-                size: 30,
-              ),
-            ),
-            SizedBox(
-              width: 30,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Hi,",
-                  style: TextStyle(fontSize: 30, color: Colors.white),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Hi,",
+                      style: TextStyle(fontSize: 28, color: Colors.white),
+                    ),
+                    Text(
+                      widget.user,
+                      style: TextStyle(fontSize: 28, color: Colors.white),
+                    )
+                  ],
                 ),
-                Text(
-                  widget.user,
-                  style: TextStyle(fontSize: 30, color: Colors.white),
-                )
-              ],
+              ),
             ),
           ],
         ),
       ),
       body: SingleChildScrollView(
-        child: Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 20),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -65,10 +62,19 @@ class _HomePageState extends State<HomePage> {
                                     AttendaceHome()));
                       },
                       child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 2,
+                                color: Colors.grey,
+                              ),
+                              borderRadius: BorderRadius.circular(20)),
                           width: 150,
                           height: 100,
-                          color: Colors.grey,
-                          child: Text("Attendance"))),
+                          child: Center(
+                              child: Text(
+                            "Attendance",
+                            style: TextStyle(fontSize: 20),
+                          )))),
                   SizedBox(
                     width: 20,
                   ),
@@ -81,10 +87,19 @@ class _HomePageState extends State<HomePage> {
                                     GradeHome()));
                       },
                       child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 2,
+                                color: Colors.grey,
+                              ),
+                              borderRadius: BorderRadius.circular(20)),
                           width: 150,
                           height: 100,
-                          color: Colors.grey,
-                          child: Text("Grades"))),
+                          child: Center(
+                              child: Text(
+                            "Grades",
+                            style: TextStyle(fontSize: 20),
+                          )))),
                 ],
               ),
               SizedBox(
@@ -98,10 +113,21 @@ class _HomePageState extends State<HomePage> {
                             builder: (BuildContext context) => Students()));
                   },
                   child: Container(
-                      width: 300,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 2,
+                            color: Colors.grey,
+                          ),
+                          borderRadius: BorderRadius.circular(20)),
+                      width: 150,
                       height: 100,
-                      color: Colors.grey,
-                      child: Text("Students"))),
+                      child: Center(
+                        child: Text(
+                          "Students",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ))),
             ],
           ),
         ),

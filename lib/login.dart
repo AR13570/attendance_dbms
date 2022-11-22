@@ -18,11 +18,14 @@ class _LoginDemoState extends State<LoginDemo> {
   loginpage() async {
     final SharedPreferences prefs = await _prefs;
     bool check = prefs.getBool('check') ?? false;
-    if(check == true)
-      {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage(user: prefs.getString('Teacher'))));
-      }
+    if (check == true) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => HomePage(user: prefs.getString('Teacher')!)));
+    }
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -32,21 +35,22 @@ class _LoginDemoState extends State<LoginDemo> {
 
   var log = "LOGIN";
 
-  login() async{
-    bool check = await MongoDatabase.loginpage(email.text,password.text);
-    if(check == true) {
+  login() async {
+    bool check = await MongoDatabase.loginpage(email.text, password.text);
+    if (check == true) {
       log = "LOGIN";
       final SharedPreferences prefs = await _prefs;
       await prefs.setString('Teacher', email.text);
       await prefs.setBool('check', true);
-      Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage(user: prefs.getString('Teacher'))));
-    }
-    else{
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => HomePage(user: prefs.getString('Teacher')!)));
+    } else {
       setState(() {
         log = "Login Again";
       });
     }
-
   }
 
   @override
@@ -55,12 +59,18 @@ class _LoginDemoState extends State<LoginDemo> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.deepPurple,
-        title: const Center(child: Text("Login Page",style: TextStyle(color: Colors.white),)),
+        title: const Center(
+            child: Text(
+          "Login Page",
+          style: TextStyle(color: Colors.white),
+        )),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            const SizedBox(height: 100,),
+            const SizedBox(
+              height: 100,
+            ),
             Padding(
               //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
               padding: EdgeInsets.symmetric(horizontal: 15),
@@ -90,7 +100,8 @@ class _LoginDemoState extends State<LoginDemo> {
               height: 50,
               width: 250,
               decoration: BoxDecoration(
-                  color: Colors.deepPurple, borderRadius: BorderRadius.circular(20)),
+                  color: Colors.deepPurple,
+                  borderRadius: BorderRadius.circular(20)),
               child: TextButton(
                 onPressed: () {
                   login();

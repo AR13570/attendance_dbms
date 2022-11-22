@@ -23,23 +23,48 @@ class _GradeHomeState extends State<GradeHome> {
         child: Icon(Icons.add),
         onPressed: () {
           showModalBottomSheet(
+              isScrollControlled: true,
+              shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(30))),
               context: context,
               builder: (BuildContext context) => Container(
+                    padding: EdgeInsets.all(20),
                     child: Column(
                       children: [
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 20.0),
+                          child: Text(
+                            "Enter details",
+                            style: TextStyle(
+                                fontSize: 25, fontWeight: FontWeight.bold),
+                          ),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("Subject Name"),
+                            Text(
+                              "Subject Name",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w500),
+                            ),
                             Expanded(
-                              child: TextFormField(
-                                controller: subject,
-                                decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.black))),
-                                keyboardType: TextInputType.text,
-                                validator: (val) {},
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: TextFormField(
+                                  maxLines: 1,
+                                  controller: subject,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 4),
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          borderSide:
+                                              BorderSide(color: Colors.black))),
+                                  keyboardType: TextInputType.text,
+                                  validator: (val) {},
+                                ),
                               ),
                             ),
                           ],
@@ -47,16 +72,27 @@ class _GradeHomeState extends State<GradeHome> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("Subject Code"),
+                            Text(
+                              "Subject Code",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w500),
+                            ),
                             Expanded(
-                                child: TextFormField(
-                              controller: subjectcode,
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black))),
-                              keyboardType: TextInputType.text,
-                              validator: (val) {},
+                                child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                maxLines: 1,
+                                controller: subjectcode,
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 4),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(30),
+                                        borderSide:
+                                            BorderSide(color: Colors.black))),
+                                keyboardType: TextInputType.text,
+                                validator: (val) {},
+                              ),
                             )),
                           ],
                         ),
@@ -84,54 +120,80 @@ class _GradeHomeState extends State<GradeHome> {
             borderRadius: BorderRadius.vertical(bottom: Radius.circular(40))),
         toolbarHeight: 80,
         centerTitle: true,
-        title: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text(
+        title: Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: Text(
               "Subjects",
               style: TextStyle(fontSize: 30, color: Colors.white),
             ),
-          ],
+          ),
         ),
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Text(
-              "Choose subject",
-              style: TextStyle(fontSize: 33),
-            ),
-            FutureBuilder<List<Map>>(
-                future: MongoDatabase.getsubjects(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    print(snapshot.data);
-                    return ListView.builder(
-                      physics: ClampingScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (BuildContext _, int index) => Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListTile(
-                          tileColor: Colors.grey,
-                          title: Text(snapshot.data![index]['subject']),
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        SubjectGrade(
-                                            subject: snapshot.data![index]
-                                                ['subject'])));
-                          },
+      body: Padding(
+        padding: EdgeInsets.symmetric(vertical: 20),
+        child: Center(
+          child: Column(
+            children: [
+              Text(
+                "Choose subject",
+                style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
+              ),
+              FutureBuilder<List<Map>>(
+                  future: MongoDatabase.getsubjects(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      print(snapshot.data);
+                      return ListView.builder(
+                        physics: ClampingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (BuildContext _, int index) => Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            SubjectGrade(
+                                                subject: snapshot.data![index]
+                                                    ['subject'])));
+                              },
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 2,
+                                        color: Colors.grey,
+                                      ),
+                                      borderRadius: BorderRadius.circular(20)),
+                                  width: 150,
+                                  height: 70,
+                                  child: Center(
+                                      child: Text(
+                                    snapshot.data![index]['subject'],
+                                    style: TextStyle(fontSize: 20),
+                                  )))),
+                          // ListTile(
+                          //
+                          //   title: Text(snapshot.data![index]['subject']),
+                          //   onTap: () {
+                          //     Navigator.push(
+                          //         context,
+                          //         MaterialPageRoute(
+                          //             builder: (BuildContext context) =>
+                          //                 SubjectGrade(
+                          //                     subject: snapshot.data![index]
+                          //                         ['subject'])));
+                          //   },
+                          // ),
                         ),
-                      ),
-                    );
-                  } else
-                    return CircularProgressIndicator();
-                }),
-          ],
+                      );
+                    } else
+                      return CircularProgressIndicator();
+                  }),
+            ],
+          ),
         ),
       ),
     );

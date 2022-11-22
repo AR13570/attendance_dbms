@@ -18,41 +18,69 @@ class _StudentsState extends State<Students> {
           child: Icon(Icons.add),
           onPressed: () {
             showModalBottomSheet(
+                isScrollControlled: true,
                 context: context,
-                builder: (BuildContext context) => Container(
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Student Name"),
-                              Expanded(
-                                child: TextFormField(
-                                  controller: name,
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.black))),
-                                  validator: (val) {},
-                                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(30))),
+                builder: (BuildContext context) => SafeArea(
+                      child: Container(
+                        padding: EdgeInsets.all(20),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 20.0),
+                              child: Text(
+                                "Enter details",
+                                style: TextStyle(
+                                    fontSize: 25, fontWeight: FontWeight.bold),
                               ),
-                            ],
-                          ),
-                          OutlinedButton(
-                              onPressed: () async {
-                                bool state =
-                                    await MongoDatabase.addstudent(name.text);
-                                if (state == true) {
-                                  setState(() {
-                                    Navigator.pop(context);
-                                  });
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text("Student Exist")));
-                                }
-                              },
-                              child: Text("Submit"))
-                        ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Student Name",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: name,
+                                    decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 4),
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            borderSide: BorderSide(
+                                                color: Colors.black))),
+                                    validator: (val) {},
+                                  ),
+                                ),
+                              ],
+                            ),
+                            OutlinedButton(
+                                onPressed: () async {
+                                  bool state =
+                                      await MongoDatabase.addstudent(name.text);
+                                  if (state == true) {
+                                    setState(() {
+                                      Navigator.pop(context);
+                                    });
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text("Student Exist")));
+                                  }
+                                },
+                                child: Text("Submit"))
+                          ],
+                        ),
                       ),
                     ));
           },
@@ -61,59 +89,42 @@ class _StudentsState extends State<Students> {
           backgroundColor: Colors.deepPurple,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(40))),
-          toolbarHeight: 100,
-          title: Row(
-            children: [
-              const CircleAvatar(
-                radius: 30,
-                child: Icon(
-                  Icons.person,
-                  size: 30,
-                ),
+          toolbarHeight: 80,
+          centerTitle: true,
+          title: Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: Text(
+                "Students",
+                style: TextStyle(fontSize: 30, color: Colors.white),
               ),
-              const SizedBox(
-                width: 30,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    "Attendance",
-                    style: TextStyle(fontSize: 30, color: Colors.white),
-                  ),
-                ],
-              ),
-            ],
+            ),
           ),
         ),
         body: SingleChildScrollView(
           child: Column(children: [
-            Text("Students"),
             FutureBuilder<List<Map>>(
                 future: MongoDatabase.getstudent(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     print(snapshot.data);
-                    return ListView.builder(
-                        physics: ClampingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (BuildContext _, int index) =>
-                            ExpansionTile(
-                              title: Text(snapshot.data![index]['student']),
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [Text("Test 1"), Text("29")],
-                                  ),
-                                )
-                              ],
-                            ));
+                    if (snapshot.data!.isNotEmpty) {
+                      return ListView.builder(
+                          physics: ClampingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (BuildContext _, int index) => ListTile(
+                                leading: Text((index + 1).toString()),
+                                title: Text(snapshot.data![index]['student']),
+                              ));
+                    } else
+                      return Center(
+                        child: Text(
+                          "No students registered",
+                          style: TextStyle(
+                              fontSize: 23, fontWeight: FontWeight.bold),
+                        ),
+                      );
                   } else
                     return CircularProgressIndicator();
                 })

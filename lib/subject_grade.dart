@@ -32,39 +32,44 @@ class _SubjectGradeState extends State<SubjectGrade> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Text(
-              "Student list",
-              style: TextStyle(fontSize: 33),
-            ),
-            FutureBuilder<List<Map>>(
-                future: MongoDatabase.getmarks(widget.subject),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    print(snapshot.data);
-                    return ListView.builder(
-                        physics: ClampingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (BuildContext _, int index) {
-                          return subjectMarksList(
-                            snapshot.data![index]['student'],
-                            widget.subject,
-                            snapshot.data![index]['half_yearly'],
-                            snapshot.data![index]['finals'],
-                          );
-                        });
-                  } else
-                    return CircularProgressIndicator();
-                }),
-          ],
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 20),
+          child: Column(
+            children: [
+              Text(
+                "Student list",
+                style: TextStyle(fontSize: 33),
+              ),
+              FutureBuilder<List<Map>>(
+                  future: MongoDatabase.getmarks(widget.subject),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      print(snapshot.data);
+                      return ListView.builder(
+                          physics: ClampingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (BuildContext _, int index) {
+                            return subjectMarksList(
+                              index,
+                              snapshot.data![index]['student'],
+                              widget.subject,
+                              snapshot.data![index]['half_yearly'],
+                              snapshot.data![index]['finals'],
+                            );
+                          });
+                    } else
+                      return CircularProgressIndicator();
+                  }),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget subjectMarksList(
+    index,
     student,
     sub,
     hy,
@@ -73,6 +78,7 @@ class _SubjectGradeState extends State<SubjectGrade> {
     TextEditingController _hf = TextEditingController(text: hy.toString());
     TextEditingController _fin = TextEditingController(text: finals.toString());
     return ExpansionTile(
+      leading: Text((index + 1).toString()),
       title: Text(student),
       children: [
         Column(
@@ -88,7 +94,10 @@ class _SubjectGradeState extends State<SubjectGrade> {
                       child: TextFormField(
                         controller: _hf,
                         decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 4),
                             border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
                                 borderSide: BorderSide(color: Colors.black))),
                         keyboardType: TextInputType.number,
                       ))
@@ -106,7 +115,10 @@ class _SubjectGradeState extends State<SubjectGrade> {
                       child: TextFormField(
                         controller: _fin,
                         decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 4),
                             border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
                                 borderSide: BorderSide(color: Colors.black))),
                         keyboardType: TextInputType.phone,
                       ))

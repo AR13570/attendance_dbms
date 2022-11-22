@@ -31,30 +31,16 @@ class _AttendaceHomeState extends State<AttendaceHome> {
         backgroundColor: Colors.deepPurple,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(bottom: Radius.circular(40))),
-        toolbarHeight: 100,
-        title: Row(
-          children: [
-            const CircleAvatar(
-              radius: 30,
-              child: Icon(
-                Icons.person,
-                size: 30,
-              ),
+        toolbarHeight: 80,
+        centerTitle: true,
+        title: Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: Text(
+              "Attendance",
+              style: TextStyle(fontSize: 30, color: Colors.white),
             ),
-            const SizedBox(
-              width: 30,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  "Attendance",
-                  style: TextStyle(fontSize: 30, color: Colors.white),
-                ),
-              ],
-            ),
-          ],
+          ),
         ),
       ),
       body: SafeArea(
@@ -125,63 +111,91 @@ class _AttendaceHomeState extends State<AttendaceHome> {
                   ),
                 ),
               ),
-              Text(
-                "Students",
-                style: TextStyle(fontSize: 23),
-              ),
               FutureBuilder<List<Map>>(
                   future: MongoDatabase.getattendance(
                       DateFormat('dd-MM-yyyy').format(selectedDate)),
                   builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      print("C"+selectedDate.toString());
-                      // print(snapshot.data);
-                      return ListView.builder(
-                          physics: ClampingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (BuildContext _, int index) {
-                            if (attendanceDeets.length == 0) {
-                              attendanceDeets.length = snapshot.data!.length;
-                            }
-                            if (attendanceDeets[index] == null) {
-                              attendanceDeets[index] = {
-                                'student': snapshot.data![index]['student'],
-                                'attendance': snapshot.data![index]
-                                    ['attendance']
-                              };
-                            }
-                            return ListTile(
-                              title: Text(snapshot.data![index]['student']),
-                              trailing: CupertinoSwitch(
-                                  value: attendanceDeets[index]['attendance'],
-                                  onChanged: (bool x) {
-                                    setState(() {
-                                      attendanceDeets[index]['attendance'] = x;
-                                    });
-                                  }),
-                            );
-                          });
+                    if (snapshot.hasData ||
+                        snapshot.connectionState != ConnectionState.waiting) {
+                      if (snapshot.data!.isNotEmpty) {
+                        return Column(
+                          children: [
+                            Text(
+                              "Students",
+                              style: TextStyle(fontSize: 23),
+                            ),
+                            ListView.builder(
+                                physics: ClampingScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (BuildContext _, int index) {
+                                  if (attendanceDeets.length == 0) {
+                                    attendanceDeets.length =
+                                        snapshot.data!.length;
+                                  }
+                                  if (attendanceDeets[index] == null) {
+                                    attendanceDeets[index] = {
+                                      'student': snapshot.data![index]
+                                          ['student'],
+                                      'attendance': snapshot.data![index]
+                                          ['attendance']
+                                    };
+                                  }
+                                  return ListTile(
+                                    title:
+                                        Text(snapshot.data![index]['student']),
+                                    trailing: CupertinoSwitch(
+                                        value: snapshot.data![index]
+                                            ['attendance'],
+                                        // attendanceDeets[index]
+                                        //     ['attendance'],
+                                        onChanged: (bool x) {
+                                          setState(() {
+                                            attendanceDeets[index]
+                                                ['attendance'] = x;
+                                          });
+                                        }),
+                                  );
+                                }),
+                            InkWell(
+                                onTap: () async {
+                                  print(attendanceDeets);
+                                  print("B");
+                                  await MongoDatabase.addattendance(
+                                      DateFormat('dd-MM-yyyy')
+                                          .format(selectedDate),
+                                      attendanceDeets);
+                                  setState(() {
+                                    submitted = true;
+                                  });
+                                },
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                          width: 2,
+                                          color: Colors.grey,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    width: 90,
+                                    child: Center(
+                                        child: Text(
+                                      "Submit",
+                                      style: TextStyle(fontSize: 20),
+                                    )))),
+                            submitted
+                                ? Text("Uploaded attendance details")
+                                : Container()
+                          ],
+                        );
+                      } else
+                        return Text(
+                          "No students registered",
+                          style: TextStyle(fontSize: 23),
+                        );
                     } else
                       return CircularProgressIndicator();
                   }),
-              InkWell(
-                  onTap: () async {
-                    print(attendanceDeets);
-                    print("B");
-                    await MongoDatabase.addattendance(
-                        DateFormat('dd-MM-yyyy').format(selectedDate),
-                        attendanceDeets);
-                    setState(() {
-                      submitted = true;
-                    });
-                  },
-                  child: Container(
-                      width: 150,
-                      height: 100,
-                      color: Colors.grey,
-                      child: Text("Submit"))),
-              submitted ? Text("Uploaded attendance details") : Container()
             ],
           ),
         ),
