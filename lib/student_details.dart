@@ -102,33 +102,36 @@ class _StudentsState extends State<Students> {
           ),
         ),
         body: SingleChildScrollView(
-          child: Column(children: [
-            FutureBuilder<List<Map>>(
-                future: MongoDatabase.getstudent(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    print(snapshot.data);
-                    if (snapshot.data!.isNotEmpty) {
-                      return ListView.builder(
-                          physics: ClampingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (BuildContext _, int index) => ListTile(
-                                leading: Text((index + 1).toString()),
-                                title: Text(snapshot.data![index]['student']),
-                              ));
+          child: Center(
+            child: Column(children: [
+              FutureBuilder<List<Map>>(
+                  future: MongoDatabase.getstudent(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      print(snapshot.data);
+                      if (snapshot.data!.isNotEmpty) {
+                        return ListView.builder(
+                            physics: ClampingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (BuildContext _, int index) =>
+                                ListTile(
+                                  leading: Text((index + 1).toString()),
+                                  title: Text(snapshot.data![index]['student']),
+                                ));
+                      } else
+                        return Center(
+                          child: Text(
+                            "No students registered",
+                            style: TextStyle(
+                                fontSize: 23, fontWeight: FontWeight.bold),
+                          ),
+                        );
                     } else
-                      return Center(
-                        child: Text(
-                          "No students registered",
-                          style: TextStyle(
-                              fontSize: 23, fontWeight: FontWeight.bold),
-                        ),
-                      );
-                  } else
-                    return CircularProgressIndicator();
-                })
-          ]),
+                      return CircularProgressIndicator();
+                  })
+            ]),
+          ),
         ));
   }
 }
