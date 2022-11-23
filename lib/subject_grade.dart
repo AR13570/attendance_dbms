@@ -43,7 +43,8 @@ class _SubjectGradeState extends State<SubjectGrade> {
               FutureBuilder<List<Map>>(
                   future: MongoDatabase.getmarks(widget.subject),
                   builder: (context, snapshot) {
-                    if (snapshot.hasData) {
+                    if (snapshot.hasData &&
+                        snapshot.connectionState != ConnectionState.waiting) {
                       print(snapshot.data);
                       return ListView.builder(
                           physics: ClampingScrollPhysics(),
@@ -78,6 +79,7 @@ class _SubjectGradeState extends State<SubjectGrade> {
     TextEditingController _hf = TextEditingController(text: hy.toString());
     TextEditingController _fin = TextEditingController(text: finals.toString());
     return ExpansionTile(
+      initiallyExpanded: true,
       leading: Text((index + 1).toString()),
       title: Text(student),
       children: [
@@ -126,8 +128,8 @@ class _SubjectGradeState extends State<SubjectGrade> {
               ),
             ),
             OutlinedButton(
-                onPressed: () {
-                  MongoDatabase.addIndivMarks(
+                onPressed: () async {
+                  await MongoDatabase.addIndivMarks(
                       student, sub, _hf.text, _fin.text);
                   setState(() {});
                 },
