@@ -21,6 +21,7 @@ class _AttendaceHomeState extends State<AttendaceHome> {
   @override
   List attendanceDeets = [];
   bool submitted = false;
+  bool sameDayManip = true;
   DateTime selectedDate = DateTime.now();
 
   Widget build(BuildContext context) {
@@ -33,13 +34,11 @@ class _AttendaceHomeState extends State<AttendaceHome> {
             borderRadius: BorderRadius.vertical(bottom: Radius.circular(40))),
         toolbarHeight: 80,
         centerTitle: true,
-        title: Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: Text(
-              "Attendance",
-              style: TextStyle(fontSize: 30, color: Colors.white),
-            ),
+        title: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          child: Text(
+            "Attendance",
+            style: TextStyle(fontSize: 30, color: Colors.white),
           ),
         ),
       ),
@@ -53,6 +52,7 @@ class _AttendaceHomeState extends State<AttendaceHome> {
                 child: Container(
                   height: height * 0.5,
                   child: SfCalendar(
+                    initialSelectedDate: DateTime.now(),
                     maxDate: DateTime.now(),
                     showNavigationArrow: true,
                     view: CalendarView.month,
@@ -94,13 +94,14 @@ class _AttendaceHomeState extends State<AttendaceHome> {
                     // },
                     onTap: (CalendarTapDetails x) async {
                       selectedDate = x.date!;
-                      // setState(() {});
-                      attendanceDeets = [];
-                      var temp = await MongoDatabase.getattendance(
-                          DateFormat('dd-MM-yyyy').format(selectedDate));
-                      print("A");
+                      sameDayManip = false;
                       setState(() {});
-                      attendanceDeets.length = temp.length;
+                      attendanceDeets = [];
+                      // var temp = await MongoDatabase.getattendance(
+                      //     DateFormat('dd-MM-yyyy').format(selectedDate));
+                      // print("A");
+                      // setState(() {});
+                      // attendanceDeets.length = temp.length;
                       submitted = false;
                     },
                     monthViewSettings: MonthViewSettings(
@@ -116,8 +117,9 @@ class _AttendaceHomeState extends State<AttendaceHome> {
                   future: MongoDatabase.getattendance(
                       DateFormat('dd-MM-yyyy').format(selectedDate)),
                   builder: (context, snapshot) {
-                    if (snapshot.hasData ||
-                        snapshot.connectionState != ConnectionState.waiting) {
+                    if (snapshot.hasData &&
+                        (snapshot.connectionState != ConnectionState.waiting ||
+                            sameDayManip)) {
                       if (snapshot.data!.isNotEmpty) {
                         return Column(
                           children: [
@@ -130,10 +132,10 @@ class _AttendaceHomeState extends State<AttendaceHome> {
                                 shrinkWrap: true,
                                 itemCount: snapshot.data!.length,
                                 itemBuilder: (BuildContext _, int index) {
-                                  if (attendanceDeets.length == 0) {
-                                    attendanceDeets.length =
-                                        snapshot.data!.length;
-                                  }
+                                  //if (attendanceDeets.length == 0) {
+                                  attendanceDeets.length =
+                                      snapshot.data!.length;
+                                  //}
                                   if (attendanceDeets[index] == null) {
                                     attendanceDeets[index] = {
                                       'student': snapshot.data![index]
@@ -152,6 +154,7 @@ class _AttendaceHomeState extends State<AttendaceHome> {
                                           setState(() {
                                             attendanceDeets[index]
                                                 ['attendance'] = x;
+                                            sameDayManip = true;
                                           });
                                         }),
                                   );
