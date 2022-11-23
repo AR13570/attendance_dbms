@@ -226,6 +226,7 @@ class MongoDatabase {
       var x = await attend.findOne(
           {'teacher': teacher, 'student': data[i]['student'], 'date': date});
       data[i]['attendance'] = x?['attendance'] ?? false;
+      data[i]['date'] = date;
     }
     return data;
   }

@@ -5,6 +5,9 @@ import 'home.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  ErrorWidget.builder = (FlutterErrorDetails details) => Scaffold(
+    body: Container(child: CircularProgressIndicator()),
+  );
   runApp(const MyApp());
 }
 
