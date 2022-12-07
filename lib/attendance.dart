@@ -56,52 +56,11 @@ class _AttendaceHomeState extends State<AttendaceHome> {
                     maxDate: DateTime.now(),
                     showNavigationArrow: true,
                     view: CalendarView.month,
-
-                    // monthCellBuilder:
-                    //     (BuildContext buildContext, MonthCellDetails details) {
-                    //   return InkWell(
-                    //     onTap: () {
-                    //       setState(() {
-                    //         selectedDate = details.date;
-                    //         attendanceDeets = [];
-                    //       });
-                    //     },
-                    //     child: Container(
-                    //       decoration: BoxDecoration(
-                    //           color: details.date.isAfter(DateTime.now())
-                    //               ? Colors.grey.shade400
-                    //               : Colors.transparent,
-                    //           border: Border.all(
-                    //               color: Colors.grey.shade600,
-                    //               width: 0.002 * width)),
-                    //       child: Center(
-                    //         child: Container(
-                    //           padding: const EdgeInsets.all(4),
-                    //           decoration: BoxDecoration(
-                    //             shape: BoxShape.circle,
-                    //             color: details.date.isSameDate(DateTime.now())
-                    //                 ? Colors.blue
-                    //                 : Colors.transparent,
-                    //           ),
-                    //           child: Text(
-                    //             details.date.day.toString(),
-                    //             style: TextStyle(fontSize: 18),
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   );
-                    // },
                     onTap: (CalendarTapDetails x) async {
                       selectedDate = x.date!;
                       sameDayManip = false;
                       setState(() {});
                       attendanceDeets = [];
-                      // var temp = await MongoDatabase.getattendance(
-                      //     DateFormat('dd-MM-yyyy').format(selectedDate));
-                      // print("A");
-                      // setState(() {});
-                      // attendanceDeets.length = temp.length;
                       submitted = false;
                     },
                     monthViewSettings: MonthViewSettings(
